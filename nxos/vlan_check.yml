@@ -1,0 +1,34 @@
+---
+- name: NXOS Query
+  hosts: nxos
+  connection: local
+
+  tasks:
+    - name: Include Tenant vars
+      include_vars:
+        ansible.builtin.file: "{{ vlan_file }}.yml"
+
+    - name: Query NXOS
+      cisco.nxos.nxos_facts:
+        gather_subset: all
+      register: response
+
+    - name: VLANs found on NXOS Device
+      ansible.builtin.debug:
+        msg: "{{ response.ansible_facts.vlan_list }}"
+
+    - NAME: BUILD ARRAY OF VLAN IDS FROM TENANT VAR FILE
+      ANSIBLE.BUILTIN.SET_FACT:
+        vlans_check: "{{ vlans | map(attribute='id') | list }}"
+
+    - name: VLANs Required by Tenant
+      ansible.builtin.debug:
+        msg: "{{ vlans_check }}"
+
+    - name: Check for VLAN Existance
+      ansible.builtin.debug:
+        msg: "vlanId {{ item }} has been found"
+      with_items: "{{ response.ansible_facts.vlan_list }}"
+      loop_control:
+        label: "{{ item }}"
+      when: item in vlans_check

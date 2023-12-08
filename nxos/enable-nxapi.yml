@@ -1,0 +1,13 @@
+---
+- name: NXOS Query
+  hosts: nxos
+  connection: local
+
+  tasks:
+    - name: Enable NX-API
+      vars:
+        ansible_connection: network_cli
+        ansible_network_os: nxos
+      cisco.nxos.nxos_nxapi:
+        enable_http: true
+        enable_https: true
