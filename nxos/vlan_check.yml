@@ -1,5 +1,5 @@
 ---
-- name: NXOS Query
+- name: Configure VLAN on Cisco Nexus
   hosts: nxos
   connection: local
   gather_facts: false
