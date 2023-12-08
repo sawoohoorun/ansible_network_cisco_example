@@ -2,7 +2,7 @@
 - name: NXOS Query
   hosts: nxos
   connection: local
-
+  gather_facts: false
   tasks:
     - name: Enable NX-API
       vars:
