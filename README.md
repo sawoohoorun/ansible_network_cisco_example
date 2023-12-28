@@ -12,7 +12,7 @@
 Red Hat Enterprise Linux release 8.8 (Ootpa)
 ```
 > **Warning**
->Using Mac with Apple Silicon will cause problem on some of python package which causing cisco.nexus collection
+>Using Mac with Apple Silicon as ansible workstation will cause problem on some of python package which causing cisco.nexus collection
 
 ### Ansible Environment
 - Python 3.6.8

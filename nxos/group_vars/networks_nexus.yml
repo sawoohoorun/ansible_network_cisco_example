@@ -2,6 +2,6 @@ nxos_state: present
 vlan_file: vlan
 ansible_user: admin
 ansible_password: r3dh4t1!
-ansible_connection: httpapi
+ansible_connection: network_cli
 ansible_network_os: nxos
-ansible_python_interpreter: /usr/bin/python3.11
+ansible_python_interpreter: /usr/bin/python2
