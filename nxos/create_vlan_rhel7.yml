@@ -1,0 +1,59 @@
+---
+- name: Automation Create vlan
+  hosts: networks_nexus
+  gather_facts: false
+  vars:
+    vlan_name: "vlan11"
+    vlan_number: "11"
+    vlan_array: []
+
+  tasks:
+    - name: Get timestamp
+      ansible.builtin.command: "date +%Y-%m-%d_%H-%M-%S"
+      delegate_to: localhost
+      register: timestamp
+    - name: Debug timestamp
+      ansible.builtin.debug:
+        msg: "{{ timestamp.stdout }}"
+
+
+    - name: Backup Nexus config
+      cisco.nxos.nxos_config:
+        # backup: yes
+        backup: false
+        backup_options:
+          filename: "backup_config_nexus_{{timestamp.stdout}}"
+          # dir_path: "/home/satlusr/playbook/network/backup/nexus/{{inventory_hostname}}"
+          dir_path: "."
+
+    - name: Check vlan before create
+      cisco.nxos.nxos_facts:
+        gather_subset:
+        - 'min'
+        gather_network_resources:
+        - vlans
+      register: check_vlan
+
+    - name: debug check vlan
+      ansible.builtin.debug:
+        msg: "{{ check_vlan }}"
+    - name: debug
+      ansible.builtin.debug:
+        msg: "{{ item.vlan_id  }}"
+      with_items: "{{ check_vlan.ansible_facts.ansible_network_resources.vlans }}"
+
+    - name: create array
+      set_fact:
+        vlan_array: "{{ vlan_array + [ item.vlan_id ] }}"
+      with_items: "{{ check_vlan.ansible_facts.ansible_network_resources.vlans }}"
+    - name: debug check vlan array
+      ansible.builtin.debug:
+        msg: "{{ vlan_array }}"
+
+    - name: Create vlan{{vlan_number}}
+      cisco.nxos.nxos_vlans:
+        config:
+          - vlan_id: "{{vlan_number}}"
+            name: "{{vlan_name}}"
+        state: merged
+      when: vlan_number not in vlan_array
