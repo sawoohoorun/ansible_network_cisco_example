@@ -1,3 +1,4 @@
+---
 nxos_state: present
 vlan_file: vlan
 ansible_user: admin

@@ -3,35 +3,33 @@
   hosts: networks_nexus
   gather_facts: false
   vars:
-    vlan_name: "vlan12"
+    vlan_name: vlan12
     vlan_number: "12"
     vlan_array: []
-
   tasks:
     - name: Get timestamp
-      ansible.builtin.command: "date +%Y-%m-%d_%H-%M-%S"
+      ansible.builtin.command: date +%Y-%m-%d_%H-%M-%S
       delegate_to: localhost
       register: timestamp
     - name: Debug timestamp
       ansible.builtin.debug:
         msg: "{{ timestamp.stdout }}"
 
-
     - name: Backup Nexus config
       cisco.nxos.nxos_config:
         # backup: yes
         backup: false
         backup_options:
-          filename: "backup_config_nexus_{{timestamp.stdout}}"
+          filename: backup_config_nexus_{{timestamp.stdout}}
           # dir_path: "/home/satlusr/playbook/network/backup/nexus/{{inventory_hostname}}"
-          dir_path: "."
+          dir_path: .
 
     - name: Check vlan before create
       cisco.nxos.nxos_facts:
         gather_subset:
-        - 'min'
+          - min
         gather_network_resources:
-        - vlans
+          - vlans
       register: check_vlan
 
     - name: debug check vlan
