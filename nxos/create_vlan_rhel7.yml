@@ -3,8 +3,8 @@
   hosts: networks_nexus
   gather_facts: false
   vars:
-    vlan_name: "vlan11"
-    vlan_number: "11"
+    vlan_name: "vlan12"
+    vlan_number: "12"
     vlan_array: []
 
   tasks:
