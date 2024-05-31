@@ -1,0 +1,51 @@
+---
+- name: manage RHEL
+  host: rhel
+  tasks:
+    - name: install 'httpd' package
+      ansible.builtin.package:
+        name: httpd
+        state: present
+    - name: allow selinux on /etc/private
+      community.general.sefcontext:
+        target: /var/private(/.*)?
+        setype: httpd_sys_content_t
+        state: present
+    # enable repository for httpd service & install httpd package & enable httpd service
+    - name: Enable repository for httpd service
+      ansible.builtin.command: subscription-manager repos --enable=rhel-7-server-optional-rpms
+
+    - name: Install httpd package
+      ansible.builtin.package:
+        name: httpd
+        state: present
+
+    - name: Enable httpd service
+      ansible.builtin.service:
+        name: httpd
+        enabled: true
+    # check sshd.conf if root password login is enable
+    # Content suggestion provided by Ansible Lightspeed
+    - name: Check sshd.conf if root password login is enable
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: ^PermitRootLogin
+        line: PermitRootLogin yes
+    # upgrade python to latest & restart services
+    # Content suggestion provided by Ansible Lightspeed
+    - name: Upgrade python to latest
+      ansible.builtin.package:
+        name: python
+        state: latest
+
+    - name: Restart services
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: restarted
+      loop:
+        - httpd
+        - sshd
+    # enable mssql role on rhel
+    # Content suggestion provided by Ansible Lightspeed
+    - name: Enable mssql role on rhel
+      ansible.builtin.command: subscription-manager repos --enable=rhel-7-server-mssql-server-2017

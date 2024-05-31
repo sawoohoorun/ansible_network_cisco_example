@@ -7,6 +7,7 @@
     - name: Enable NX-API
       vars:
         ansible_connection: network_cli
+        host_key_checking: false
         ansible_network_os: nxos
       cisco.nxos.nxos_nxapi:
         enable_http: true

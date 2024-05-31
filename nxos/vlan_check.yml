@@ -16,9 +16,8 @@
     - name: VLANs found on NXOS Device
       ansible.builtin.debug:
         msg: "{{ response.ansible_facts.vlan_list }}"
-
-    - NAME: BUILD ARRAY OF VLAN IDS FROM TENANT VAR FILE
-      ANSIBLE.BUILTIN.SET_FACT:
+    - name: Build Arrays of VLAN ID
+      ansible.builtin.debug:
         vlans_check: "{{ vlans | map(attribute='id') | list }}"
 
     - name: VLANs Required by Tenant

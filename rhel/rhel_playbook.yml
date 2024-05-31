@@ -1,0 +1,22 @@
+---
+- name: manage RHEL
+  host: rhel
+  tasks:
+  # install httpd service & enable service on firewall
+  # Content suggestion provided by Ansible Lightspeed
+  - name: Install httpd service
+    ansible.builtin.package:
+      name: httpd
+      state: present
+
+  - name: Enable service on firewall
+    ansible.posix.firewalld:
+      service: http
+      permanent: true
+      state: enabled
+      immediate: true
+
+  # install mssql server on rhel
+  
+
+
