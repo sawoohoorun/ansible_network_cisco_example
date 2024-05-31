@@ -4,7 +4,7 @@
   connection: local
 
   tasks:
-    - name: Include Tenant vars
+    - name: Include vlan vars
       include_vars:
         ansible.builtin.file: "{{ vlan_file }}.yml"
 
